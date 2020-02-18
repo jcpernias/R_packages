@@ -1,0 +1,119 @@
+#+STARTUP: hidestars indent contents
+
+* Building R packages
+
+** Initial setup
+
+- Coniguration in ~~/.Rprofile~:
+  #+begin_src R
+    # -*- mode: R -*-
+
+    .First <- function() {
+      options(
+        repos = c(CRAN = "https://cran.rstudio.com/"),
+        browserNLdisabled = TRUE,
+        deparse.max.lines = 2,
+        warnPartialMatchDollar = TRUE,
+        usethis.full_name = "José Pernías",
+        usethis.description = list(
+          `Authors@R` = 'person("José", "Pernías", email = "jcpernias@gmail.com",
+                                 role = c("aut", "cre"))',
+          License = "MIT + file LICENSE",
+          Version = "0.0.0.9000"
+        ),
+        usethis.protocol = "ssh",
+        devtools.path = "~/local/share/R-dev"
+      )
+    }
+
+    .libPaths("~/local/share/R")
+
+    if (interactive()) {
+      suppressMessages(require(devtools))
+      suppressMessages(require(testthat))
+    }
+  #+end_src
+
+
+
+** Basic steps
+
+- Run ~devtools::create('path-to-project')~.
+
+- Edit DESCRIPTION:
+
+  + Add Title: *no* final dot.
+
+  + Add Description: one paragraph.
+
+- Add license: ~usethis::use_mit_license()~.
+
+- Create git repository: ~usethis::use_git()~.
+
+- Setup GitHub repository:
+
+  + Run ~usethis::use_github()~. A new GitHub repo will be created via
+    the GitHub API, therefore you must make a [[https://github.com/settings/tokens][GitHub personal access
+    token (PAT)]] available. You can either provide this directly via
+    the ~auth_token~ argument or store it for retrieval with
+    ~github_token()~.
+
+  + Run in the shell: ~git push --set-upstream origin master~.
+
+- Add ~Readme.md~ file: ~usethis::use_readme_rmd()~. You'll still need
+  to render ~README.Rmd~ regularly, to keep ~README.md~
+  up-to-date. You can also embed plots.In that case, don't forget to
+  commit and push the resulting figure files, so they display on
+  GitHub!
+
+- Run ~devtools::install()~ from the console or select Install and
+  Restart from the Build tab to render ~README.md~ correctly.
+
+- Package documentation: ~usethis::use_package_doc()~, and
+  ~devtools::document()~.
+
+** Add functions
+
+- Create a new R file: ~usethis::use_r('file')~.
+
+- Add a package to Imports: ~use_package('pkg')~.
+
+- Document internal functions as usual, and add the ~@noRd~ tag.
+
+** Build datasets
+
+- Setup ~data-raw~ folder to build a ~dataset~:
+  ~usethus::use_data_raw('dataset')~. Add code and raw data files in
+  that folder.
+
+- Store the dataset using code like:
+  #+begin_src R
+    usethis::use_data(dataset, compress = 'xz',
+                      overwrite = TRUE, version = 3)
+  #+end_src
+
+- Document datasets:
+
+  + Place documentation in ~R/data.R~: ~usethis::use_r('data')~.
+
+  + Import ~tibble~ if needed ~usethis::use_tibble()~. Document a
+    returned tibble like so:
+    #+begin_src R
+      #' @return a [tibble][tibble::tibble-package]
+    #+end_src
+
+  + Instead of documenting the data directly you document the name of
+    the dataset:
+    #+begin_src R
+      #' A dataset
+      #'
+      #' Furher description
+      #'
+      #' @format A data frame with R rows and V variables:
+      #' \describe{
+      #'   \item{V1}{describe V1}
+      #'   \item{V2}{describe V2}
+      #' }
+      #' @source \url{...}
+      "dataset"
+    #+end_src
