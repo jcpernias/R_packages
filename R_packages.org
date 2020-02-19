@@ -1,6 +1,7 @@
-#+STARTUP: hidestars indent contents
+#+STARTUP: hidestars indent content
 
 * Building R packages
+
 
 ** Initial setup
 
@@ -72,13 +73,23 @@
 - Package documentation: ~usethis::use_package_doc()~, and
   ~devtools::document()~.
 
+
 ** Add functions
 
 - Create a new R file: ~usethis::use_r('file')~.
 
-- Add a package to Imports: ~use_package('pkg')~.
+- Add a package to Imports: ~usethis::use_package('pkg')~.
 
 - Document internal functions as usual, and add the ~@noRd~ tag.
+
+
+** Tests
+
+- Prepare package for tests: ~usethis::use_testthat()~.
+
+- Initialize a test file using ~usethis::use_test()~.
+
+- Run all tests with ~usethis::test()~.
 
 ** Build datasets
 
