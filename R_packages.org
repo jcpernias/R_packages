@@ -89,7 +89,7 @@
 
 - Initialize a test file using ~usethis::use_test()~.
 
-- Run all tests with ~usethis::test()~.
+- Run all tests with ~devtools::test()~.
 
 ** Build datasets
 
