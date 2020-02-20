@@ -91,6 +91,7 @@
 
 - Run all tests with ~devtools::test()~.
 
+
 ** Build datasets
 
 - Setup ~data-raw~ folder to build a ~dataset~:
@@ -128,3 +129,15 @@
       #' @source \url{...}
       "dataset"
     #+end_src
+
+** Vignettes
+
+- Add a vignette with: ~use_vignette('lorenz')~.
+
+- Set the vignette title and copy it in
+  '%\VignetteIndexEntry{<title>}'.
+
+- Include the packages used in the vignette in the Suggest section of
+  DESCRIPTION: ~use_package('dplyr', type = 'Suggests')~.
+
+- Install and build the vignette: ~install(build_vignettes = TRUE)~.
